@@ -1,0 +1,108 @@
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_pf_policy_list" model="ir.ui.view">
+        <field name="name">pf.policy.list</field>
+        <field name="model">pf.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="employee_contribution_pct"/>
+                <field name="employer_contribution_pct"/>
+                <field name="salary_basis"/>
+                <field name="interest_method"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pf_policy_form" model="ir.ui.view">
+        <field name="name">pf.policy.form</field>
+        <field name="model">pf.policy</field>
+        <field name="arch" type="xml">
+            <form string="PF Policy">
+
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id"/>
+                            <field name="active"/>
+                            <field name="auto_enroll"/>
+                        </group>
+
+                        <group>
+                            <field name="eligibility_after_months"/>
+                            <field name="salary_basis"/>
+                            <field name="interest_method"/>
+                            <field name="interest_rate"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <page string="Contribution">
+
+                            <group>
+                                <group>
+                                    <field name="employee_contribution_pct"/>
+                                </group>
+
+                                <group>
+                                    <field name="employer_contribution_pct"/>
+                                </group>
+                            </group>
+
+                        </page>
+
+                        <page string="Employee Types">
+
+                            <field name="employee_type_ids" widget="many2many_tags"/>
+
+                        </page>
+
+                        <page string="Vesting">
+
+                            <group>
+                                <field name="vesting_enabled"/>
+                            </group>
+
+                            <field name="vesting_ids">
+                                <list editable="bottom">
+                                    <field name="service_year_from"/>
+                                    <field name="service_year_to"/>
+                                    <field name="employer_share_percent"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+
+                        </page>
+
+                        <page string="Notes">
+
+                            <field name="notes"/>
+
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Action -->
+    <record id="action_pf_policy" model="ir.actions.act_window">
+        <field name="name">PF Policies</field>
+        <field name="res_model">pf.policy</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

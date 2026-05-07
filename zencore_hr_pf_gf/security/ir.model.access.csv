@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+zencore_hr_pf_gf.access_pf_policy,access_pf_policy,zencore_hr_pf_gf.model_pf_policy,base.group_user,1,1,1,1
+zencore_hr_pf_gf.access_pf_policy_vesting,access_pf_policy_vesting,zencore_hr_pf_gf.model_pf_policy_vesting,base.group_user,1,1,1,1

@@ -1,0 +1,17 @@
+<!-- views/pf_menu_views.xml -->
+
+<odoo>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_zencore_hr_root" name="Zencore Hr benefits Fund"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_configuration" name="Configuration" parent="menu_zencore_hr_root"  />
+
+    <!-- PF Policy Menu -->
+    <menuitem id="menu_pf_policy" name="PF Policies" parent="menu_configuration" action="action_pf_policy" />
+
+    <!-- PF Vesting Menu -->
+    <menuitem id="menu_pf_policy_vesting" name="PF Vesting Rules" parent="menu_configuration" action="action_pf_policy_vesting" />
+
+</odoo>
