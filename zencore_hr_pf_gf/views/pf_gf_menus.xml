@@ -3,15 +3,88 @@
 <odoo>
 
     <!-- Root Menu -->
-    <menuitem id="menu_zencore_hr_root" name="Zencore Hr benefits Fund"/>
+    <menuitem
+        id="menu_zencore_hr_root"
+        name="Zencore Hr Benefits Fund"
+        sequence="10"
+    />
+
 
     <!-- Configuration Menu -->
-    <menuitem id="menu_configuration" name="Configuration" parent="menu_zencore_hr_root"  />
+    <menuitem
+        id="menu_configuration"
+        name="Configuration"
+        parent="menu_zencore_hr_root"
+        sequence="10"
+    />
+
 
     <!-- PF Policy Menu -->
-    <menuitem id="menu_pf_policy" name="PF Policies" parent="menu_configuration" action="action_pf_policy" />
+    <menuitem
+        id="menu_pf_policy"
+        name="PF Policies"
+        parent="menu_configuration"
+        action="action_pf_policy"
+        sequence="10"
+    />
+
 
     <!-- PF Vesting Menu -->
-    <menuitem id="menu_pf_policy_vesting" name="PF Vesting Rules" parent="menu_configuration" action="action_pf_policy_vesting" />
+    <menuitem
+        id="menu_pf_policy_vesting"
+        name="PF Vesting Rules"
+        parent="menu_configuration"
+        action="action_pf_policy_vesting"
+        sequence="20"
+    />
+
+
+    <!-- Fund Account Menu -->
+    <menuitem
+        id="menu_fund_account"
+        name="Fund Accounts"
+        parent="menu_zencore_hr_root"
+        sequence="20"
+    />
+
+
+    <!-- PF Account Menu -->
+    <menuitem
+        id="menu_emp_pf_account"
+        name="PF Accounts"
+        parent="menu_fund_account"
+        action="action_pf_account"
+        sequence="10"
+    />
+
+
+    <!-- PF Transaction Menu -->
+    <menuitem
+        id="menu_pf_transaction"
+        name="PF Transactions"
+        parent="menu_fund_account"
+        action="action_pf_transaction"
+        sequence="20"
+    />
+
+
+    <!-- PF Settlement Menu -->
+    <menuitem
+        id="menu_pf_settlement"
+        name="PF Settlements"
+        parent="menu_fund_account"
+        action="action_pf_settlement"
+        sequence="30"
+    />
+
+
+    <!-- Interest Rate Menu -->
+    <menuitem
+        id="menu_pf_interest_rate"
+        name="PF Interest Rates"
+        parent="menu_configuration"
+        action="action_pf_interest_rate"
+        sequence="30"
+    />
 
 </odoo>

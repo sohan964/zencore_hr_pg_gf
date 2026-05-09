@@ -1,0 +1,167 @@
+<!-- views/pf_settlement_views.xml -->
+
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_pf_settlement_list" model="ir.ui.view">
+        <field name="name">pf.settlement.list</field>
+        <field name="model">pf.settlement</field>
+        <field name="arch" type="xml">
+            <list>
+
+                <field name="employee_id"/>
+                <field name="pf_account_id"/>
+                <field name="separation_date"/>
+                <field name="settlement_date"/>
+                <field name="employee_share"/>
+                <field name="vested_share"/>
+                <field name="interest_amount"/>
+                <field name="payable_amount"/>
+                <field name="state"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Form View -->
+    <record id="view_pf_settlement_form" model="ir.ui.view">
+        <field name="name">pf.settlement.form</field>
+        <field name="model">pf.settlement</field>
+        <field name="arch" type="xml">
+            <form string="PF Settlement">
+
+                <header>
+
+                    <button
+                        name="action_calculate"
+                        string="Calculate"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+
+                    <button
+                        name="action_approve"
+                        string="Approve"
+                        type="object"
+                        class="btn-success"
+                        invisible="state != 'calculated'"
+                    />
+
+                    <button
+                        name="action_mark_paid"
+                        string="Mark Paid"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'approved'"
+                    />
+
+                    <button
+                        name="action_cancel"
+                        string="Cancel"
+                        type="object"
+                        class="btn-danger"
+                        invisible="state == 'paid'"
+                    />
+
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,calculated,approved,paid,cancelled"
+                    />
+
+                </header>
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="pf_account_id"/>
+                        </group>
+
+                        <group>
+                            <field name="separation_date"/>
+                            <field name="settlement_date"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+
+                    </group>
+
+                    <group string="Settlement Amounts" col="4">
+
+                        <field name="employee_share" readonly="1"/>
+                        <field name="employer_share" readonly="1"/>
+                        <field name="vested_share" readonly="1"/>
+                        <field name="interest_amount" readonly="1"/>
+
+                    </group>
+
+                    <group>
+
+                        <field
+                            name="payable_amount"
+                            readonly="1"
+                            class="oe_inline"
+                        />
+
+                    </group>
+
+                </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Search View -->
+    <!-- <record id="view_pf_settlement_search" model="ir.ui.view">
+        <field name="name">pf.settlement.search</field>
+        <field name="model">pf.settlement</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="employee_id"/>
+                <field name="pf_account_id"/>
+                <field name="state"/>
+
+                <filter
+                    name="filter_paid"
+                    string="Paid"
+                    domain="[('state', '=', 'paid')]"
+                />
+
+                <group expand="0" string="Group By">
+
+                    <filter
+                        name="group_by_employee"
+                        string="Employee"
+                        context="{'group_by': 'employee_id'}"
+                    />
+
+                    <filter
+                        name="group_by_state"
+                        string="Status"
+                        context="{'group_by': 'state'}"
+                    />
+
+                </group>
+
+            </search>
+        </field>
+    </record> -->
+
+
+    <!-- Action -->
+    <record id="action_pf_settlement" model="ir.actions.act_window">
+        <field name="name">PF Settlements</field>
+        <field name="res_model">pf.settlement</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="search_view_id" ref="view_pf_settlement_search"/> -->
+    </record>
+
+</odoo>

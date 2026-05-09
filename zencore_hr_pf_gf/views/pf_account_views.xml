@@ -1,0 +1,202 @@
+<!-- views/pf_account_views.xml -->
+
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_pf_account_list" model="ir.ui.view">
+        <field name="name">pf.account.list</field>
+        <field name="model">pf.account</field>
+        <field name="arch" type="xml">
+            <list>
+
+                <field name="account_number"/>
+                <field name="employee_id"/>
+                <field name="policy_id"/>
+                <field name="company_id"/>
+                <field name="total_employee_share"/>
+                <field name="total_employer_share"/>
+                <field name="total_interest"/>
+                <field name="total_balance"/>
+                <field name="state"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Form View -->
+    <record id="view_pf_account_form" model="ir.ui.view">
+        <field name="name">pf.account.form</field>
+        <field name="model">pf.account</field>
+        <field name="arch" type="xml">
+            <form string="PF Account">
+
+                <header>
+
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,waiting_eligibility,active,suspended,settled,closed"
+                    />
+                    <button>Active</button>
+
+                </header>
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="account_number" />
+                            <field name="employee_id"/>
+                            <field name="policy_id"/>
+                            <field name="company_id"/>
+                        </group>
+
+                        <group>
+                            <field name="enrollment_date"/>
+                            <field name="eligible_date"/>
+                            <field name="opening_balance_imported"/>
+                            <field
+                                name="opening_balance_date"
+                                required="opening_balance_imported"
+                                invisible="not opening_balance_imported"
+                            />
+                        </group>
+
+                    </group>
+
+
+                    <group string="Balance Information" col="4">
+
+                        <field name="total_employee_share" readonly="1"/>
+                        <field name="total_employer_share" readonly="1"/>
+                        <field name="total_interest" readonly="1"/>
+                        <field name="total_balance" readonly="1"/>
+
+                    </group>
+
+
+                    <notebook>
+
+                        <!-- Transactions -->
+                        <page string="Transactions">
+
+                            <field name="transaction_ids" readonly="1">
+
+                                <list>
+
+                                    <field name="transaction_date"/>
+                                    <field name="transaction_type"/>
+                                    <field name="amount_employee"/>
+                                    <field name="amount_employer"/>
+                                    <field name="amount_interest"/>
+                                    <field name="total_amount"/>
+                                    <field name="state"/>
+
+                                </list>
+
+                            </field>
+
+                        </page>
+
+
+                        <!-- Settlements -->
+                        <page string="Settlements">
+
+                            <field name="settlement_ids" readonly="1">
+
+                                <list>
+
+                                    <field name="settlement_date"/>
+                                    <field name="employee_share"/>
+                                    <field name="employer_share"/>
+                                    <field name="vested_share"/>
+                                    <field name="interest_amount"/>
+                                    <field name="payable_amount"/>
+                                    <field name="state"/>
+
+                                </list>
+
+                            </field>
+
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Search View -->
+    <!-- <record id="view_pf_account_search" model="ir.ui.view">
+        <field name="name">pf.account.search</field>
+        <field name="model">pf.account</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="account_number"/>
+                <field name="employee_id"/>
+                <field name="policy_id"/>
+                <field name="company_id"/>
+                <field name="state"/>
+
+                <filter
+                    name="filter_active"
+                    string="Active"
+                    domain="[('state', '=', 'active')]"
+                />
+
+                <filter
+                    name="filter_closed"
+                    string="Closed"
+                    domain="[('state', '=', 'closed')]"
+                />
+
+                <group expand="0" string="Group By">
+
+                    <filter
+                        name="group_by_employee"
+                        string="Employee"
+                        context="{'group_by': 'employee_id'}"
+                    />
+
+                    <filter
+                        name="group_by_policy"
+                        string="Policy"
+                        context="{'group_by': 'policy_id'}"
+                    />
+
+                    <filter
+                        name="group_by_company"
+                        string="Company"
+                        context="{'group_by': 'company_id'}"
+                    />
+
+                    <filter
+                        name="group_by_state"
+                        string="Status"
+                        context="{'group_by': 'state'}"
+                    />
+
+                </group>
+
+            </search>
+        </field>
+    </record> -->
+
+
+    <!-- Action -->
+    <record id="action_pf_account" model="ir.actions.act_window">
+        <field name="name">PF Accounts</field>
+        <field name="res_model">pf.account</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="search_view_id" ref="view_pf_account_search"/> -->
+    </record>
+
+</odoo>

@@ -1,0 +1,158 @@
+<!-- views/pf_transaction_views.xml -->
+
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_pf_transaction_list" model="ir.ui.view">
+        <field name="name">pf.transaction.list</field>
+        <field name="model">pf.transaction</field>
+        <field name="arch" type="xml">
+            <list>
+
+                <field name="transaction_date"/>
+                <field name="pf_account_id"/>
+                <field name="employee_id"/>
+                <field name="transaction_type"/>
+                <field name="amount_employee"/>
+                <field name="amount_employer"/>
+                <field name="amount_interest"/>
+                <field name="total_amount"/>
+                <field name="balance_after"/>
+                <field name="state"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Form View -->
+    <record id="view_pf_transaction_form" model="ir.ui.view">
+        <field name="name">pf.transaction.form</field>
+        <field name="model">pf.transaction</field>
+        <field name="arch" type="xml">
+            <form string="PF Transaction">
+
+                <header>
+
+                    <button
+                        name="action_post"
+                        string="Post"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+
+                    <button
+                        name="action_reverse"
+                        string="Reverse"
+                        type="object"
+                        class="btn-danger"
+                        invisible="state != 'posted'"
+                    />
+
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,posted,reversed,cancelled"
+                    />
+
+                </header>
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="pf_account_id"/>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="transaction_type"/>
+                        </group>
+
+                        <group>
+                            <field name="transaction_date"/>
+                            <field name="payroll_id"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+
+                    </group>
+
+                    <group string="Amounts" col="4">
+
+                        <field name="amount_employee"/>
+                        <field name="amount_employer"/>
+                        <field name="amount_interest"/>
+                        <field name="total_amount" readonly="1"/>
+
+                    </group>
+
+                    <group>
+
+                        <field name="balance_after" readonly="1"/>
+                        <field name="remarks"/>
+
+                    </group>
+
+                </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Search View -->
+    <!-- <record id="view_pf_transaction_search" model="ir.ui.view">
+        <field name="name">pf.transaction.search</field>
+        <field name="model">pf.transaction</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="pf_account_id"/>
+                <field name="employee_id"/>
+                <field name="transaction_type"/>
+                <field name="state"/>
+
+                <filter
+                    name="filter_posted"
+                    string="Posted"
+                    domain="[('state', '=', 'posted')]"
+                />
+
+                <group expand="0" string="Group By">
+
+                    <filter
+                        name="group_by_employee"
+                        string="Employee"
+                        context="{'group_by': 'employee_id'}"
+                    />
+
+                    <filter
+                        name="group_by_type"
+                        string="Transaction Type"
+                        context="{'group_by': 'transaction_type'}"
+                    />
+
+                    <filter
+                        name="group_by_state"
+                        string="Status"
+                        context="{'group_by': 'state'}"
+                    />
+
+                </group>
+
+            </search>
+        </field>
+    </record>
+ -->
+
+    <!-- Action -->
+    <record id="action_pf_transaction" model="ir.actions.act_window">
+        <field name="name">PF Transactions</field>
+        <field name="res_model">pf.transaction</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="search_view_id" ref="view_pf_transaction_search"/> -->
+    </record>
+
+</odoo>

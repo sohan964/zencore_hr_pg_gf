@@ -1,3 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 zencore_hr_pf_gf.access_pf_policy,access_pf_policy,zencore_hr_pf_gf.model_pf_policy,base.group_user,1,1,1,1
 zencore_hr_pf_gf.access_pf_policy_vesting,access_pf_policy_vesting,zencore_hr_pf_gf.model_pf_policy_vesting,base.group_user,1,1,1,1
+zencore_hr_pf_gf.access_pf_account,access_pf_account,zencore_hr_pf_gf.model_pf_account,base.group_user,1,1,1,1
+zencore_hr_pf_gf.access_pf_interest_rate,access_pf_interest_rate,zencore_hr_pf_gf.model_pf_interest_rate,base.group_user,1,1,1,1
+zencore_hr_pf_gf.access_pf_transaction,access_pf_transaction,zencore_hr_pf_gf.model_pf_transaction,base.group_user,1,1,1,1
+zencore_hr_pf_gf.access_pf_settlement,access_pf_settlement,zencore_hr_pf_gf.model_pf_settlement,base.group_user,1,1,1,1

@@ -1,0 +1,96 @@
+<!-- views/pf_interest_rate_views.xml -->
+
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_pf_interest_rate_list" model="ir.ui.view">
+        <field name="name">pf.interest.rate.list</field>
+        <field name="model">pf.interest.rate</field>
+        <field name="arch" type="xml">
+            <list>
+
+                <field name="policy_id"/>
+                <field name="year"/>
+                <field name="rate"/>
+                <field name="effective_from"/>
+                <field name="effective_to"/>
+                <field name="active"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Form View -->
+    <record id="view_pf_interest_rate_form" model="ir.ui.view">
+        <field name="name">pf.interest.rate.form</field>
+        <field name="model">pf.interest.rate</field>
+        <field name="arch" type="xml">
+            <form string="PF Interest Rate">
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="policy_id"/>
+                            <field name="year"/>
+                            <field name="rate"/>
+                        </group>
+
+                        <group>
+                            <field name="effective_from"/>
+                            <field name="effective_to"/>
+                            <field name="active"/>
+                        </group>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Search View -->
+    <!-- <record id="view_pf_interest_rate_search" model="ir.ui.view">
+        <field name="name">pf.interest.rate.search</field>
+        <field name="model">pf.interest.rate</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="policy_id"/>
+                <field name="year"/>
+                <field name="rate"/>
+
+                <group expand="0" string="Group By">
+
+                    <filter
+                        name="group_by_policy"
+                        string="Policy"
+                        context="{'group_by': 'policy_id'}"
+                    />
+
+                    <filter
+                        name="group_by_year"
+                        string="Year"
+                        context="{'group_by': 'year'}"
+                    />
+
+                </group>
+
+            </search>
+        </field>
+    </record> -->
+
+
+    <!-- Action -->
+    <record id="action_pf_interest_rate" model="ir.actions.act_window">
+        <field name="name">PF Interest Rates</field>
+        <field name="res_model">pf.interest.rate</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="search_view_id" ref="view_pf_interest_rate_search"/> -->
+    </record>
+
+</odoo>
