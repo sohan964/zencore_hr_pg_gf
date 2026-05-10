@@ -33,14 +33,54 @@
 
                 <header>
 
-                    <field
-                        name="state"
-                        widget="statusbar"
-                        statusbar_visible="draft,waiting_eligibility,active,suspended,settled,closed"
-                    />
-                    <button>Active</button>
+                        <!-- Waiting Eligibility -->
+                        <button
+                            name="action_waiting_eligibility"
+                            string="Waiting Eligibility"
+                            type="object"
+                            class="btn-warning"
+                            invisible="
+                                state != 'draft'
+                                or not is_waiting_eligibility
+                            "
+                        />
 
-                </header>
+                        <button 
+                            name="action_activate"
+                            string="Activate"
+                            type="object"
+                            class="btn-primary"
+                            invisible="
+                                state !='draft' or
+                                not is_eligible
+                            "
+                        />
+
+                        <button 
+                            name="action_draft"
+                            string="Draft"
+                            type="object"
+                            class="btn-danger"
+                            invisible="state == 'draft'"
+                        /> 
+
+
+
+                        <!-- Statusbar -->
+                        <field
+                            name="state"
+                            widget="statusbar"
+                            statusbar_visible="
+                                draft,
+                                waiting_eligibility,
+                                active,
+                                suspended,
+                                settled,
+                                closed
+                            "
+                        />
+
+                    </header>
 
                 <sheet>
 

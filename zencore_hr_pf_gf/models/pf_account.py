@@ -1,6 +1,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from dateutil.relativedelta import relativedelta
+from datetime import date
 
 class PfAccount(models.Model):
     _name = 'pf.account'
@@ -122,7 +123,44 @@ class PfAccount(models.Model):
         tracking=True,
     )
 
-    
+    is_eligible = fields.Boolean(
+        compute='_compute_is_eligible',
+    )
+
+    is_waiting_eligibility = fields.Boolean(
+        compute='_compute_is_eligible',
+    )
+
+    def action_waiting_eligibility(self):
+        for rec in self:
+            rec.state = 'waiting_eligibility'
+
+
+    def action_activate(self):
+        for rec in self:
+            rec.state = 'active'
+
+    def action_draft(self):
+        for rec in self:
+            rec.state = 'draft'
+
+    @api.depends('eligible_date')
+    def _compute_is_eligible(self):
+
+        today = fields.Date.today()
+
+        for rec in self:
+
+            rec.is_eligible = False
+            rec.is_waiting_eligibility = False
+
+            if rec.eligible_date:
+
+                if rec.eligible_date <= today:
+                    rec.is_eligible = True
+                else:
+                    rec.is_waiting_eligibility = True
+
     @api.onchange('employee_id', 'policy_id')
     def _onchange_eligible_date(self):
 

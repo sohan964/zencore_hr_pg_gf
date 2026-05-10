@@ -42,18 +42,13 @@ class PfTransaction(models.Model):
 
     transaction_type = fields.Selection(
         [
-            ('employee_contribution', 'Employee Contribution'),
-            ('employer_contribution', 'Employer Contribution'),
-            ('interest', 'Interest'),
+            ('contribution', 'Contribution'),
             ('opening_balance', 'Opening Balance'),
             ('adjustment', 'Adjustment'),
             ('withdrawal', 'Withdrawal'),
             ('settlement', 'Settlement'),
             ('reversal', 'Reversal'),
         ],
-        string='Transaction Type',
-        required=True,
-        tracking=True,
     )
 
     payroll_id = fields.Many2one(
