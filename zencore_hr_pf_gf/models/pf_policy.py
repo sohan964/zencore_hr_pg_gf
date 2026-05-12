@@ -1,3 +1,19 @@
+#need to add this in salary creation rules
+# result = 0.0
+
+# pf_account = payslip.env['pf.account'].search([
+#     ('employee_id', '=', employee.id),
+#     ('state', '=', 'active'),
+# ], limit=1)
+
+# if pf_account:
+
+#     result = -(
+#         employee.wage
+#         * pf_account.policy_id.employee_contribution_pct
+#     ) / 100
+
+
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -137,3 +153,5 @@ class PfPolicy(models.Model):
                 raise ValidationError(
                     _('Eligibility months cannot be negative.')
                 )
+            
+    

@@ -195,3 +195,31 @@ class PfTransaction(models.Model):
             })
 
             rec.state = 'reversed'
+
+    #handle opening balance
+    @api.model_create_multi
+    def create(self, vals_list):
+
+        records = super().create(vals_list)
+
+        for rec in records:
+
+            if rec.transaction_type == 'opening_balance':
+
+                rec.pf_account_id.write({
+                    'opening_balance_imported': True,
+                    'opening_balance_date': fields.Date.today(),
+                })
+
+        return records
+    
+    api.constrains('pf_account_id', 'transaction_type')
+    def _check_duplicate_opening_balance(self):
+        for rec in self:
+            domain = [
+                ('id', '!=', rec.id),
+                ('pf_account_id', '=', rec.pf_account_id.id),
+                ('transaction_type', '=', 'opening_balance')
+            ]
+            if self.search_count(domain):
+                raise ValidationError("Opening balance already submited for this employee")

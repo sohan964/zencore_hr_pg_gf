@@ -1,9 +1,8 @@
-from odoo import models
+from odoo import models, fields
 
 
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
-
 
     def action_payslip_done(self):
 
@@ -32,6 +31,25 @@ class HrPayslip(models.Model):
             ) / 100
 
             print("this is slip>>>>>>>>>>>>>>>>>>>>>",slip.move_id.id)
+            current_date = fields.Date.today()
+            pf_interest_rate = self.env['pf.interest.rate'].search([
+                ('policy_id', '=', policy.id),
+                ('active', '=', True),
+                ('effective_from', '<=', current_date),
+                ('effective_to', '>=', current_date),
+            ], limit=1)
+
+            interest_amount = 0
+            if pf_interest_rate:
+                 interest_amount = (
+                     pf_account.total_balance * pf_interest_rate.rate
+                 )/100
+            else: 
+                interest_amount = (
+                    pf_account.total_balance * policy.interest_rate
+                )/100
+
+            after_balance = pf_account.total_balance + interest_amount + employee_amount + employer_amount
 
             self.env['pf.transaction'].create({
                 'pf_account_id': pf_account.id,
@@ -41,6 +59,8 @@ class HrPayslip(models.Model):
                 'payroll_id': slip.id,
                 'amount_employee': employee_amount,
                 'amount_employer': employer_amount,
+                'amount_interest': interest_amount,
+                'balance_after': after_balance,
                 'state': 'posted',
                 'remarks': f'PF generated from payroll {slip.name}',
             })

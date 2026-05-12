@@ -228,6 +228,10 @@ class PfAccount(models.Model):
                     _('Opening Balance Date is required.')
                 )
 
+
+    #opening balance imported
+    # @api.
+
     # @api.model_create_multi
     # def create(self, vals_list):
 
