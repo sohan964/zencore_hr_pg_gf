@@ -227,10 +227,29 @@ class PfAccount(models.Model):
                 raise ValidationError(
                     _('Opening Balance Date is required.')
                 )
+    
+    @api.constrains('employee_id', 'state')
+    def _check_duplicate_account(self):
+
+        for rec in self:
+
+            if rec.state != 'active':
+                continue
+
+            domain = [
+                ('id', '!=', rec.id),
+                ('employee_id', '=', rec.employee_id.id),
+                ('state', '=', 'active'),
+            ]
+
+            if self.search_count(domain):
+
+                raise ValidationError(
+                    _("This employee already has an active PF account.")
+                )
 
 
-    #opening balance imported
-    # @api.
+    
 
     # @api.model_create_multi
     # def create(self, vals_list):

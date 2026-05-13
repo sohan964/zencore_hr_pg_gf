@@ -91,6 +91,12 @@ class PfSettlement(models.Model):
         tracking=True,
     )
 
+    include_interest = fields.Boolean(
+        string='Include Interest',
+        default=True,
+        tracking=True,
+    )
+
     state = fields.Selection(
         [
             ('draft', 'Draft'),
@@ -104,18 +110,45 @@ class PfSettlement(models.Model):
         tracking=True,
     )
 
+    #this is for the Badge
+    payment_status = fields.Selection(
+        [
+            ('pending', 'Pending'),
+            ('paid', 'Paid'),
+        ],
+        compute='_compute_payment_status',
+        store=True,
+    )
+    #it will show the status badge based on the journal entry
+    @api.depends('move_id.state')
+    def _compute_payment_status(self):
+
+        for rec in self:
+
+            if rec.move_id and rec.move_id.state == 'posted':
+                rec.payment_status = 'paid'
+            else:
+                rec.payment_status = 'pending'
+
     @api.depends(
         'employee_share',
         'vested_share',
         'interest_amount',
+        'include_interest',
     )
     def _compute_payable_amount(self):
+
         for rec in self:
-            rec.payable_amount = (
+
+            payable = (
                 rec.employee_share
                 + rec.vested_share
-                + rec.interest_amount
             )
+
+            if rec.include_interest:
+                payable += rec.interest_amount
+
+            rec.payable_amount = payable
 
     @api.constrains(
         'separation_date',
@@ -140,6 +173,26 @@ class PfSettlement(models.Model):
                 raise ValidationError(
                     _('Selected PF Account does not belong to the employee.')
                 )
+    
+    @api.constrains('pf_account_id', 'state')
+    def _check_duplicate_settlement(self):
+
+        for rec in self:
+
+            if rec.state == 'cancelled':
+                continue
+
+            domain = [
+                ('id', '!=', rec.id),
+                ('pf_account_id', '=', rec.pf_account_id.id),
+                ('state', '!=', 'cancelled'),
+            ]
+
+            if self.search_count(domain):
+
+                raise ValidationError(
+                    _('This PF account is already in settlement.')
+                )
 
     def action_calculate(self):
         for rec in self:
@@ -154,7 +207,7 @@ class PfSettlement(models.Model):
 
             if account.policy_id.vesting_enabled:
 
-                joining_date = rec.employee_id.first_contract_date
+                joining_date = rec.employee_id.contract_date_start
 
                 if joining_date and rec.separation_date:
 
@@ -166,7 +219,7 @@ class PfSettlement(models.Model):
 
                     vesting_rule = self.env[
                         'pf.policy.vesting'
-                    ].search([
+                    ].search([  
                         ('policy_id', '=', account.policy_id.id),
                         ('service_year_from', '<=', service_years),
                         ('service_year_to', '>=', service_years),
@@ -179,7 +232,7 @@ class PfSettlement(models.Model):
                         )
 
             else:
-                vested_percent = 100.0
+                vested_percent = account.policy_id.vesting_rate
 
             rec.vested_share = (
                 rec.employer_share * vested_percent
@@ -188,11 +241,49 @@ class PfSettlement(models.Model):
             rec.state = 'calculated'
 
     def action_approve(self):
+
         for rec in self:
 
             if rec.state != 'calculated':
                 continue
 
+            journal = rec.pf_account_id.policy_id.pf_journal_id
+
+            if not journal:
+                raise ValidationError(
+                    _('Please configure PF Journal in PF Policy.')
+                )
+
+            payable_account = journal.default_account_id
+
+            if not payable_account:
+                raise ValidationError(
+                    _('Please configure default account in PF Journal.')
+                )
+
+            move = self.env['account.move'].create({
+                'move_type': 'entry',
+                'journal_id': journal.id,
+                'date': fields.Date.today(),
+                'ref': f'PF Settlement - {rec.employee_id.name}',
+                'line_ids': [
+
+                    (0, 0, {
+                        'name': 'PF Settlement',
+                        'account_id': payable_account.id,
+                        'debit': rec.payable_amount,
+                    }),
+
+                    (0, 0, {
+                        'name': 'PF Bank Payment',
+                        'account_id': payable_account.id,
+                        'credit': rec.payable_amount,
+                    }),
+                ]
+            })
+
+            rec.move_id = move.id
+            rec.pf_account_id.state = 'settled'
             rec.state = 'approved'
 
     def action_mark_paid(self):

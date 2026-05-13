@@ -12,6 +12,7 @@
         'views/pf_transaction_views.xml',
         'views/pf_interest_rate_views.xml',
         'views/pf_settlement_views.xml',
+        # 'views/res_company_inherited_views.xml',
         "views/pf_gf_menus.xml",
     ],
     'installable': True,

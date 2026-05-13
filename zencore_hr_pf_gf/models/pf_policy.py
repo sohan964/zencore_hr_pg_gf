@@ -44,11 +44,11 @@ class PfPolicy(models.Model):
         tracking=True,
     )
 
-    auto_enroll = fields.Boolean(
-        string='Auto Enroll',
-        default=False,
-        help='Automatically create PF account for eligible employees.',
-    )
+    # auto_enroll = fields.Boolean(
+    #     string='Auto Enroll',
+    #     default=False,
+    #     help='Automatically create PF account for eligible employees.',
+    # )
 
     eligibility_after_months = fields.Integer(
         string='Eligibility After (Months)',
@@ -105,6 +105,10 @@ class PfPolicy(models.Model):
         tracking=True,
     )
 
+    vesting_rate = fields.Float(
+        string="Default Vesting Rate (%)"
+    )
+
     vesting_enabled = fields.Boolean(
         string='Enable Vesting',
         default=False,
@@ -114,10 +118,15 @@ class PfPolicy(models.Model):
     notes = fields.Text(
         string='Internal Notes',
     )
+    pf_journal_id = fields.Many2one(
+        'account.journal',
+        string='PF Journal',
+    )
 
     vesting_ids = fields.One2many(
         'pf.policy.vesting',
         'policy_id',
+        invisiable="vesting_enabled",
         string='Vesting Rules',
     )
 

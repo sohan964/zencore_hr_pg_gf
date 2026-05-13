@@ -31,12 +31,13 @@
                             <field name="name"/>
                             <field name="company_id"/>
                             <field name="active"/>
-                            <field name="auto_enroll"/>
+                            <field name="vesting_rate"/>
                         </group>
 
                         <group>
                             <field name="eligibility_after_months"/>
                             <field name="salary_basis"/>
+                            <field name="pf_journal_id"/>
                             <field name="interest_method"/>
                             <field name="interest_rate"/>
                         </group>
@@ -70,7 +71,7 @@
                                 <field name="vesting_enabled"/>
                             </group>
 
-                            <field name="vesting_ids">
+                            <field name="vesting_ids" invisible="not vesting_enabled">
                                 <list editable="bottom">
                                     <field name="service_year_from"/>
                                     <field name="service_year_to"/>

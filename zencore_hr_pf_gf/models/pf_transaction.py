@@ -187,9 +187,9 @@ class PfTransaction(models.Model):
                 'pf_account_id': rec.pf_account_id.id,
                 'transaction_date': fields.Date.today(),
                 'transaction_type': 'reversal',
-                'amount_employee': rec.amount_employee,
-                'amount_employer': rec.amount_employer,
-                'amount_interest': rec.amount_interest,
+                'amount_employee': -rec.amount_employee,
+                'amount_employer': -rec.amount_employer,
+                'amount_interest': -rec.amount_interest,
                 'remarks': _('Reversal of transaction %s') % rec.id,
                 'state': 'posted',
             })
@@ -213,13 +213,51 @@ class PfTransaction(models.Model):
 
         return records
     
-    api.constrains('pf_account_id', 'transaction_type')
+    #duplicate opening balance
+    @api.constrains('pf_account_id', 'transaction_type')
     def _check_duplicate_opening_balance(self):
+
         for rec in self:
+
+            if rec.transaction_type != 'opening_balance':
+                continue
+
             domain = [
                 ('id', '!=', rec.id),
                 ('pf_account_id', '=', rec.pf_account_id.id),
-                ('transaction_type', '=', 'opening_balance')
+                ('transaction_type', '=', 'opening_balance'),
             ]
+
             if self.search_count(domain):
-                raise ValidationError("Opening balance already submited for this employee")
+
+                raise ValidationError(
+                    _("Opening balance already submitted for this employee.")
+            )
+    #prevent duplicate monthly fees
+    @api.constrains(
+        'pf_account_id',
+        'payroll_id',
+        'transaction_type',
+    )
+    def _check_duplicate_payroll_contribution(self):
+
+        for rec in self:
+
+            if rec.transaction_type != 'contribution':
+                continue
+
+            domain = [
+                ('id', '!=', rec.id),
+                ('pf_account_id', '=', rec.pf_account_id.id),
+                ('payroll_id', '=', rec.payroll_id.id),
+                ('transaction_type', '=', 'contribution'),
+            ]
+
+            if self.search_count(domain):
+
+                raise ValidationError(
+                    _(
+                        "PF contribution already exists "
+                        "for this payroll."
+                    )
+                )

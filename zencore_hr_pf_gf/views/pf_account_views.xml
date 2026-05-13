@@ -61,7 +61,8 @@
                             string="Draft"
                             type="object"
                             class="btn-danger"
-                            invisible="state == 'draft'"
+                            invisible="state == 'draft' or state=='closed'"
+                            disable="state == 'closed'"
                         /> 
 
 

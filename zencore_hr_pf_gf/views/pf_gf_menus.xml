@@ -10,41 +10,12 @@
     />
 
 
-    <!-- Configuration Menu -->
-    <menuitem
-        id="menu_configuration"
-        name="Configuration"
-        parent="menu_zencore_hr_root"
-        sequence="10"
-    />
-
-
-    <!-- PF Policy Menu -->
-    <menuitem
-        id="menu_pf_policy"
-        name="PF Policies"
-        parent="menu_configuration"
-        action="action_pf_policy"
-        sequence="10"
-    />
-
-
-    <!-- PF Vesting Menu -->
-    <menuitem
-        id="menu_pf_policy_vesting"
-        name="PF Vesting Rules"
-        parent="menu_configuration"
-        action="action_pf_policy_vesting"
-        sequence="20"
-    />
-
-
     <!-- Fund Account Menu -->
     <menuitem
         id="menu_fund_account"
         name="Fund Accounts"
         parent="menu_zencore_hr_root"
-        sequence="20"
+        sequence="10"
     />
 
 
@@ -78,13 +49,32 @@
     />
 
 
+    <!-- Configuration Menu -->
+    <menuitem
+        id="menu_configuration"
+        name="Configuration"
+        parent="menu_zencore_hr_root"
+        sequence="20"
+    />
+
+
+    <!-- PF Policy Menu -->
+    <menuitem
+        id="menu_pf_policy"
+        name="PF Policies"
+        parent="menu_configuration"
+        action="action_pf_policy"
+        sequence="10"
+    />
+
+
     <!-- Interest Rate Menu -->
     <menuitem
         id="menu_pf_interest_rate"
         name="PF Interest Rates"
         parent="menu_configuration"
         action="action_pf_interest_rate"
-        sequence="30"
+        sequence="20"
     />
 
 </odoo>
