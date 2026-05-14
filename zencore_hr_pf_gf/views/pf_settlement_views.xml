@@ -101,9 +101,13 @@
                     <group>
 
                         <group>
-                            <field name="employee_id"/>
                             <field name="pf_account_id"/>
-                            <field name="include_interest"/>
+                            <field name="employee_id"/>
+                            
+                            <field
+                                name="include_interest"
+                                readonly="state in ['approved', 'paid']"
+                            />
                         </group>
 
                         <group>

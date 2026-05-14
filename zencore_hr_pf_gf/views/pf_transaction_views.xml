@@ -19,7 +19,6 @@
                 <field name="total_amount"/>
                 <field name="balance_after"/>
                 <field name="state"/>
-
             </list>
         </field>
     </record>
@@ -42,24 +41,34 @@
                         invisible="state != 'draft'"
                     />
 
-                    <button
-                        name="action_reverse"
-                        string="Reverse"
-                        type="object"
-                        class="btn-danger"
-                        invisible="state != 'posted'"
-                    />
-
                     <field
                         name="state"
                         widget="statusbar"
-                        statusbar_visible="draft,posted,reversed,cancelled"
+                        statusbar_visible="draft,posted,cancelled"
                     />
 
                 </header>
 
                 <sheet>
+                    <widget
+                        name="web_ribbon"
+                        title="Pending"
+                        bg_color="text-bg-warning"
+                        invisible="
+                            payment_status != 'pending'
+                            or state=='draft'
+                        "
+                    />
 
+                    <widget
+                        name="web_ribbon"
+                        title="Paid"
+                        bg_color="text-bg-success"
+                        invisible="
+                            payment_status != 'paid'
+                            or state=='draft'
+                        "
+                    />
                     <group>
 
                         <group>

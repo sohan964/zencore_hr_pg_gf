@@ -5,4 +5,3 @@ from . import pf_interest_rate
 from . import pf_transaction
 from . import pf_settlement
 from . import hr_payslip
-# from . import res_company

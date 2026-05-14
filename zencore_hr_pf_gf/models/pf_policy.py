@@ -1,19 +1,3 @@
-#need to add this in salary creation rules
-# result = 0.0
-
-# pf_account = payslip.env['pf.account'].search([
-#     ('employee_id', '=', employee.id),
-#     ('state', '=', 'active'),
-# ], limit=1)
-
-# if pf_account:
-
-#     result = -(
-#         employee.wage
-#         * pf_account.policy_id.employee_contribution_pct
-#     ) / 100
-
-
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -57,13 +41,6 @@ class PfPolicy(models.Model):
         help='Employee becomes eligible after specified months.',
     )
 
-    employee_type_ids = fields.Many2many(
-        'hr.employee.category',
-        'pf_policy_employee_category_rel',
-        'policy_id',
-        'category_id',
-        string='Eligible Employee Types',
-    )
 
     employee_contribution_pct = fields.Float(
         string='Employee Contribution (%)',
@@ -74,29 +51,6 @@ class PfPolicy(models.Model):
     employer_contribution_pct = fields.Float(
         string='Employer Contribution (%)',
         required=True,
-        tracking=True,
-    )
-
-    salary_basis = fields.Selection(
-        [
-            ('basic', 'Basic Salary'),
-            ('gross', 'Gross Salary'),
-            ('custom', 'Custom Salary Rules'),
-        ],
-        string='Salary Basis',
-        required=True,
-        default='basic',
-        tracking=True,
-    )
-
-    interest_method = fields.Selection(
-        [
-            ('manual', 'Manual'),
-            ('yearly', 'Yearly'),
-        ],
-        string='Interest Method',
-        required=True,
-        default='yearly',
         tracking=True,
     )
 
@@ -121,6 +75,18 @@ class PfPolicy(models.Model):
     pf_journal_id = fields.Many2one(
         'account.journal',
         string='PF Journal',
+    )
+
+    pf_liability_account_id = fields.Many2one(
+        'account.account',
+        string='PF Liability Account',
+        required=True,
+    )
+
+    pf_bank_account_id = fields.Many2one(
+        'account.account',
+        string='PF Bank Account',
+        required=True,
     )
 
     vesting_ids = fields.One2many(

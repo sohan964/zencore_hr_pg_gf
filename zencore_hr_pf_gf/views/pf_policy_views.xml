@@ -10,8 +10,8 @@
                 <field name="company_id"/>
                 <field name="employee_contribution_pct"/>
                 <field name="employer_contribution_pct"/>
-                <field name="salary_basis"/>
-                <field name="interest_method"/>
+                <!-- <field name="salary_basis"/> -->
+                <!-- <field name="interest_method"/> -->
                 <field name="active"/>
             </list>
         </field>
@@ -36,9 +36,9 @@
 
                         <group>
                             <field name="eligibility_after_months"/>
-                            <field name="salary_basis"/>
                             <field name="pf_journal_id"/>
-                            <field name="interest_method"/>
+                            <field name="pf_liability_account_id"/>
+                            <field name="pf_bank_account_id"/>
                             <field name="interest_rate"/>
                         </group>
                     </group>
@@ -56,12 +56,6 @@
                                     <field name="employer_contribution_pct"/>
                                 </group>
                             </group>
-
-                        </page>
-
-                        <page string="Employee Types">
-
-                            <field name="employee_type_ids" widget="many2many_tags"/>
 
                         </page>
 

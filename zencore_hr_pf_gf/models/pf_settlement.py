@@ -8,12 +8,7 @@ class PfSettlement(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'settlement_date desc, id desc'
 
-    employee_id = fields.Many2one(
-        'hr.employee',
-        string='Employee',
-        required=True,
-        tracking=True,
-    )
+
 
     pf_account_id = fields.Many2one(
         'pf.account',
@@ -22,6 +17,18 @@ class PfSettlement(models.Model):
         ondelete='cascade',
         tracking=True,
     )
+    employee_id = fields.Many2one(
+        'hr.employee',
+        string='Employee',
+        required=True,
+        tracking=True,
+    )
+    @api.onchange('pf_account_id')
+    def _onchange_pf_account_id(self):
+
+        for rec in self:
+
+            rec.employee_id = rec.pf_account_id.employee_id
 
     company_id = fields.Many2one(
         related='pf_account_id.company_id',
@@ -254,11 +261,22 @@ class PfSettlement(models.Model):
                     _('Please configure PF Journal in PF Policy.')
                 )
 
-            payable_account = journal.default_account_id
+            liability_account = (
+                rec.pf_account_id.policy_id.pf_liability_account_id
+            )
 
-            if not payable_account:
+            bank_account = (
+                rec.pf_account_id.policy_id.pf_bank_account_id
+            )
+
+            if not liability_account:
                 raise ValidationError(
-                    _('Please configure default account in PF Journal.')
+                    _('Please configure PF Liability Account.')
+                )
+
+            if not bank_account:
+                raise ValidationError(
+                    _('Please configure PF Bank Account.')
                 )
 
             move = self.env['account.move'].create({
@@ -269,14 +287,14 @@ class PfSettlement(models.Model):
                 'line_ids': [
 
                     (0, 0, {
-                        'name': 'PF Settlement',
-                        'account_id': payable_account.id,
+                        'name': 'PF Settlement Liability',
+                        'account_id': liability_account.id,
                         'debit': rec.payable_amount,
                     }),
 
                     (0, 0, {
-                        'name': 'PF Bank Payment',
-                        'account_id': payable_account.id,
+                        'name': 'PF Settlement Bank Payment',
+                        'account_id': bank_account.id,
                         'credit': rec.payable_amount,
                     }),
                 ]

@@ -53,8 +53,9 @@ class PfAccount(models.Model):
 
     account_number = fields.Char(
         string='Account Number',
-        required=True,
         copy=False,
+        default='New',
+        readonly=True,
         tracking=True,
     )
 
@@ -251,14 +252,13 @@ class PfAccount(models.Model):
 
     
 
-    # @api.model_create_multi
-    # def create(self, vals_list):
+    @api.model_create_multi
+    def create(self, vals_list):
 
-    #     for vals in vals_list:
+        for vals in vals_list:
 
-    #         if vals.get('account_number', _('New')) == _('New'):
-    #             vals['account_number'] = self.env[
-    #                 'ir.sequence'
-    #             ].next_by_code('pf.account') or _('New')
+            vals['account_number'] = self.env[
+                'ir.sequence'
+            ].next_by_code('pf.account')
 
-    #     return super().create(vals_list)
+        return super().create(vals_list)

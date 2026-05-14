@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_pf_settlement_report"
+            model="ir.actions.report">
+
+        <field name="name">PF Settlement Report</field>
+
+        <field name="model">pf.settlement</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">zencore_hr_pf_gf.report_pf_settlement_document</field>
+
+        <field name="report_file">zencore_hr_pf_gf.report_pf_settlement_document</field>
+
+        <field
+            name="binding_model_id"
+            ref="model_pf_settlement"
+        />
+
+        <field name="binding_type">report</field>
+
+    </record>
+
+</odoo>

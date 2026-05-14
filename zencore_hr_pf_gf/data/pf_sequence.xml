@@ -1,0 +1,15 @@
+<odoo>
+
+    <record id="seq_pf_account" model="ir.sequence">
+
+        <field name="name">PF Account</field>
+
+        <field name="code">pf.account</field>
+
+        <field name="prefix">PFA/</field>
+
+        <field name="padding">5</field>
+
+    </record>
+
+</odoo>

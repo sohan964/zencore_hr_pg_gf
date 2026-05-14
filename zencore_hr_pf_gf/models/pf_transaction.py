@@ -47,7 +47,7 @@ class PfTransaction(models.Model):
             ('adjustment', 'Adjustment'),
             ('withdrawal', 'Withdrawal'),
             ('settlement', 'Settlement'),
-            ('reversal', 'Reversal'),
+            # ('reversal', 'Reversal'),
         ],
     )
 
@@ -104,7 +104,7 @@ class PfTransaction(models.Model):
         [
             ('draft', 'Draft'),
             ('posted', 'Posted'),
-            ('reversed', 'Reversed'),
+            # ('reversed', 'Reversed'),
             ('cancelled', 'Cancelled'),
         ],
         string='Status',
@@ -115,6 +115,26 @@ class PfTransaction(models.Model):
     remarks = fields.Text(
         string='Remarks',
     )
+
+    #this is for the Badge
+    payment_status = fields.Selection(
+        [
+            ('pending', 'Pending'),
+            ('paid', 'Paid'),
+        ],
+        compute='_compute_payment_status',
+        store=True,
+    )
+    #it will show the status badge based on the journal entry
+    @api.depends('move_id.state')
+    def _compute_payment_status(self):
+
+        for rec in self:
+
+            if rec.move_id and rec.move_id.state == 'posted':
+                rec.payment_status = 'paid'
+            else:
+                rec.payment_status = 'pending'
 
     @api.depends(
         'amount_employee',
@@ -177,24 +197,7 @@ class PfTransaction(models.Model):
 
             rec.state = 'posted'
 
-    def action_reverse(self):
-        for rec in self:
 
-            if rec.state != 'posted':
-                continue
-
-            self.create({
-                'pf_account_id': rec.pf_account_id.id,
-                'transaction_date': fields.Date.today(),
-                'transaction_type': 'reversal',
-                'amount_employee': -rec.amount_employee,
-                'amount_employer': -rec.amount_employer,
-                'amount_interest': -rec.amount_interest,
-                'remarks': _('Reversal of transaction %s') % rec.id,
-                'state': 'posted',
-            })
-
-            rec.state = 'reversed'
 
     #handle opening balance
     @api.model_create_multi
