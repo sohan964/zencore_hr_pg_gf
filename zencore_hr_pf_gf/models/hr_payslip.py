@@ -30,7 +30,7 @@ class HrPayslip(models.Model):
                 * policy.employer_contribution_pct
             ) / 100
 
-            print("this is slip>>>>>>>>>>>>>>>>>>>>>",slip.move_id.id)
+            #print("this is slip>>>>>>>>>>>>>>>>>>>>>",slip.move_id.id)
             current_date = fields.Date.today()
             pf_interest_rate = self.env['pf.interest.rate'].search([
                 ('policy_id', '=', policy.id),
@@ -55,7 +55,13 @@ class HrPayslip(models.Model):
                 'pf_account_id': pf_account.id,
                 'transaction_date': slip.date_to,
                 'transaction_type': 'contribution',
-                'move_id':slip.move_id.id,
+                'move_id': slip.move_id.id,
+                'journal_id': slip.move_id.journal_id.id,
+
+                'debit_account_id': policy.pf_liability_account_id.id,
+
+                'credit_account_id': policy.pf_bank_account_id.id,
+
                 'payroll_id': slip.id,
                 'amount_employee': employee_amount,
                 'amount_employer': employer_amount,

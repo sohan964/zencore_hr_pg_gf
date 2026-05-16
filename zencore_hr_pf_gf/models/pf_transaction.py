@@ -49,7 +49,7 @@ class PfTransaction(models.Model):
             # ('settlement', 'Settlement'),
             # ('reversal', 'Reversal'),
         ],
-        required = True
+        required=True
     )
 
     payroll_id = fields.Many2one(

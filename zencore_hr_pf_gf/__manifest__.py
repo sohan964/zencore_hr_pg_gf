@@ -1,5 +1,5 @@
 {
-    'name': 'Zencore Hr PF GF ',
+    'name': 'Employee Final Settlement',
     'version': "19.0.1.0.0",
     'author': "Sohan",
     'depends': ['sale', 'account', 'stock', "hr",

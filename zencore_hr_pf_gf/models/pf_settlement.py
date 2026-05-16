@@ -289,12 +289,14 @@ class PfSettlement(models.Model):
                     (0, 0, {
                         'name': 'PF Settlement Liability',
                         'account_id': liability_account.id,
+                        'partner_id': rec.employee_id.work_contact_id.id,
                         'debit': rec.payable_amount,
                     }),
 
                     (0, 0, {
                         'name': 'PF Settlement Bank Payment',
                         'account_id': bank_account.id,
+                        'partner_id': rec.employee_id.work_contact_id.id,
                         'credit': rec.payable_amount,
                     }),
                 ]
