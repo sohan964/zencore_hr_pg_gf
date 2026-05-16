@@ -44,11 +44,12 @@ class PfTransaction(models.Model):
         [
             ('contribution', 'Contribution'),
             ('opening_balance', 'Opening Balance'),
-            ('adjustment', 'Adjustment'),
-            ('withdrawal', 'Withdrawal'),
-            ('settlement', 'Settlement'),
+            # ('adjustment', 'Adjustment'),
+            # ('withdrawal', 'Withdrawal'),
+            # ('settlement', 'Settlement'),
             # ('reversal', 'Reversal'),
         ],
+        required = True
     )
 
     payroll_id = fields.Many2one(
@@ -62,6 +63,24 @@ class PfTransaction(models.Model):
         string='Journal Entry',
         readonly=True,
         copy=False,
+        tracking=True,
+    )
+
+    journal_id = fields.Many2one(
+        'account.journal',
+        string='Journal',
+        tracking=True,
+    )
+
+    debit_account_id = fields.Many2one(
+        'account.account',
+        string='Debit Account',
+        tracking=True,
+    )
+
+    credit_account_id = fields.Many2one(
+        'account.account',
+        string='Credit Account',
         tracking=True,
     )
 
@@ -190,11 +209,46 @@ class PfTransaction(models.Model):
                 )
 
     def action_post(self):
+
         for rec in self:
 
             if rec.state != 'draft':
                 continue
 
+            if (
+                not rec.journal_id
+                or not rec.debit_account_id
+                or not rec.credit_account_id
+            ):
+                raise ValidationError(
+                    _(
+                        'Please configure Journal, '
+                        'Debit Account and Credit Account.'
+                    )
+                )
+
+            move = self.env['account.move'].create({
+                'move_type': 'entry',
+                'journal_id': rec.journal_id.id,
+                'date': rec.transaction_date,
+                'ref': f'PF Transaction - {rec.employee_id.name}',
+                'line_ids': [
+
+                    (0, 0, {
+                        'name': 'PF Debit',
+                        'account_id': rec.debit_account_id.id,
+                        'debit': rec.total_amount,
+                    }),
+
+                    (0, 0, {
+                        'name': 'PF Credit',
+                        'account_id': rec.credit_account_id.id,
+                        'credit': rec.total_amount,
+                    }),
+                ]
+            })
+
+            rec.move_id = move.id
             rec.state = 'posted'
 
 

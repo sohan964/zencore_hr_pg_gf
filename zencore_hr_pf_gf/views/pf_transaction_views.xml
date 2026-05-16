@@ -8,7 +8,6 @@
         <field name="model">pf.transaction</field>
         <field name="arch" type="xml">
             <list>
-
                 <field name="transaction_date"/>
                 <field name="pf_account_id"/>
                 <field name="employee_id"/>
@@ -76,6 +75,21 @@
                             <field name="employee_id" readonly="1"/>
                             <field name="company_id" readonly="1"/>
                             <field name="transaction_type"/>
+
+                            <field
+                                name="journal_id"
+                                readonly="state == 'posted'"
+                            />
+
+                            <field
+                                name="debit_account_id"
+                                readonly="state == 'posted'"
+                            />
+
+                            <field
+                                name="credit_account_id"
+                                readonly="state == 'posted'"
+                            />
                         </group>
 
                         <group>
@@ -103,7 +117,6 @@
                     </group>
 
                 </sheet>
-
                 <chatter/>
 
             </form>

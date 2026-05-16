@@ -79,13 +79,13 @@ class PfPolicy(models.Model):
 
     pf_liability_account_id = fields.Many2one(
         'account.account',
-        string='PF Liability Account',
+        string='Debit Account',
         required=True,
     )
 
     pf_bank_account_id = fields.Many2one(
         'account.account',
-        string='PF Bank Account',
+        string='Credit Account',
         required=True,
     )
 
