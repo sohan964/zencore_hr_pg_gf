@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hr_profit_sharing.access_profit_sharing_rule,access_profit_sharing_rule,hr_profit_sharing.model_profit_sharing_rule,base.group_user,1,1,1,1

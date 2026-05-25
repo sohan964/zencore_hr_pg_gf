@@ -1,0 +1,93 @@
+<odoo>
+    <!-- LIST VIEW -->
+    <record id="view_profit_sharing_rule_list" model="ir.ui.view">
+        <field name="name">profit.sharing.rule.list</field>
+        <field name="model">profit.sharing.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="employee_id"/>
+                <field name="company_id"/>
+                <field name="percentage"/>
+                <field name="salary_attachment_type_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <!-- FORM VIEW -->
+    <record id="view_profit_sharing_rule_form"
+            model="ir.ui.view">
+        <field name="name">profit.sharing.rule.form</field>
+        <field name="model">profit.sharing.rule</field>
+        <field name="arch" type="xml">
+            <form string="Profit Sharing">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="employee_id"/>
+                        </h1>
+                    </div>
+                    <group col="2">
+                        <group string="Basic Information">
+                            <field name="employee_id"/>
+                            <field name="company_id"
+                                   readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Profit Sharing">
+                            <field name="percentage"/>
+                            <field name="salary_attachment_type_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <!-- SEARCH VIEW -->
+    <!-- <record id="view_profit_sharing_rule_search"
+            model="ir.ui.view">
+
+        <field name="name">
+            profit.sharing.rule.search
+        </field>
+
+        <field name="model">
+            profit.sharing.rule
+        </field>
+
+        <field name="arch" type="xml">
+
+            <search>
+
+                <field name="employee_id"/>
+
+                <field name="company_id"/>
+
+                <filter name="active"
+                        string="Active"
+                        domain="[('active', '=', True)]"/>
+
+            </search>
+
+        </field>
+
+    </record> -->
+    <!-- ACTION -->
+    <record id="action_profit_sharing_rule" model="ir.actions.act_window">
+        <field name="name">Profit Sharing</field>
+        <field name="res_model">profit.sharing.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <!-- MENUS -->
+    <menuitem
+        id="menu_profit_sharing_root"
+        name="Profit Sharing"
+        parent="hr.menu_hr_root"
+        sequence="90"/>
+    <menuitem
+        id="menu_profit_sharing_rule"
+        name="Profit Sharing Rules"
+        parent="menu_profit_sharing_root"
+        action="action_profit_sharing_rule"
+        sequence="1"/>
+</odoo>

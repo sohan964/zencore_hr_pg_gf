@@ -1,0 +1,60 @@
+<odoo>
+    <record id="view_employee_form_profit_sharing"
+            model="ir.ui.view">
+        <field name="name">hr.employee.form.profit.sharing</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook"
+                   position="inside">
+                <page string="Profit Sharing">
+                    <!-- Generate Button -->
+                    <group invisible="profit_sharing_count > 0">
+                        <button
+                            name="action_generate_profit_sharing"
+                            type="object"
+                            string="Activate Profit Sharing"
+                            class="btn-primary"/>
+                    </group>
+                    <!-- Form Style -->
+                    <group invisible="not profit_sharing_count">
+                        <sheet>
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="active_profit_sharing_id"
+                                           readonly="1"/>
+                                </h1>
+                            </div>
+                            <group col="2">
+                                <group string="Basic Information">
+                                    <field name="profit_sharing_percentage"
+                                           readonly="1"/>
+                                    <field name="profit_sharing_company_id"
+                                           readonly="1"/>
+                                    <field name="profit_sharing_active"
+                                           readonly="1"
+                                           widget="boolean_toggle"/>
+                                </group>
+                                <group string="Payroll Information">
+                                    <field name="profit_sharing_input_type_id"
+                                           readonly="1"/>
+                                </group>
+                            </group>
+                            <footer>
+                                <button
+                                    name="action_open_profit_sharing"
+                                    type="object"
+                                    string="Open Full Form"
+                                    class="btn-primary"/>
+                                <button
+                                    name="action_view_profit_sharing"
+                                    type="object"
+                                    string="View History"/>
+                            </footer>
+                        </sheet>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
