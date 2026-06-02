@@ -5,6 +5,7 @@ class HrSalaryAdjustment(models.Model):
     _inherit = 'hr.salary.attachment'
 
     def _get_company_net_profit(self):
+        print("attachment >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debug")
 
         company = self.company_id
 
@@ -16,6 +17,7 @@ class HrSalaryAdjustment(models.Model):
             ('name', '=', 'Profit and Loss')
         ], limit=1)
 
+        print("this is report>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>debug point", report)
         if not report:
             return 0.0
 
@@ -23,7 +25,7 @@ class HrSalaryAdjustment(models.Model):
         # REPORT OPTIONS
         # ------------------------------------------------
 
-        options = report.get_options()
+        options = report.get_options({})
 
         # ------------------------------------------------
         # GET REPORT LINES
@@ -55,25 +57,29 @@ class HrSalaryAdjustment(models.Model):
     @api.onchange('other_input_type_id')
     def _onchange_profit_sharing(self):
 
+        # print("onChange >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> debug")
         for rec in self:
-
+            print("EMPLOYEE", rec.employee_ids)
             if not rec.employee_ids:
                 return
 
             # ------------------------------------------------
             # GET ACTIVE PROFIT RULE
             # ------------------------------------------------
-
+            # print("EMPLOYEE IDS ID:", rec.employee_ids.ids)
             profit_rule = self.env[
                 'profit.sharing.rule'
             ].search([
-                ('employee_id', '=', rec.employee_ids.id),
+                ('employee_id', '=', rec.employee_ids.ids),
                 ('active', '=', True),
             ], limit=1)
-
+            # print("PROFIT RULE", profit_rule)
             if not profit_rule:
                 return
-
+            
+            # print("TYPE SELECTED", rec.other_input_type_id)
+            # print("RULE TYPE", profit_rule.salary_attachment_type_id)
+            
             # ------------------------------------------------
             # TYPE MATCH
             # ------------------------------------------------
@@ -84,11 +90,15 @@ class HrSalaryAdjustment(models.Model):
             ):
                 return
 
+            # print("CALLING NET PROFIT")
             # ------------------------------------------------
             # GET NET PROFIT
             # ------------------------------------------------
 
             net_profit = rec._get_company_net_profit()
+
+            print("NET PROFIT", net_profit)
+
 
             # ------------------------------------------------
             # CALCULATE PROFIT SHARE

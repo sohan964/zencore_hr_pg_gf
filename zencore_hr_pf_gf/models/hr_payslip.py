@@ -30,7 +30,6 @@ class HrPayslip(models.Model):
                 * policy.employer_contribution_pct
             ) / 100
 
-            #print("this is slip>>>>>>>>>>>>>>>>>>>>>",slip.move_id.id)
             current_date = fields.Date.today()
             pf_interest_rate = self.env['pf.interest.rate'].search([
                 ('policy_id', '=', policy.id),
