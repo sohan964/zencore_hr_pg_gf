@@ -1,5 +1,6 @@
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from datetime import date
 
 
 class ProfitSharingRule(models.Model):
@@ -41,6 +42,7 @@ class ProfitSharingRule(models.Model):
     salary_attachment_type_id = fields.Many2one(
         'hr.payslip.input.type',
         string='Salary Adjustment Type',
+        required = True
     )
 
     @api.model
@@ -68,3 +70,106 @@ class ProfitSharingRule(models.Model):
                     'An active Profit Sharing already exists '
                     'for this employee!'
                 )
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+
+        records = super().create(vals_list)
+
+        for rec in records:
+            rec._create_profit_sharing_adjustment()
+
+        return records
+    
+    def _create_profit_sharing_adjustment(self):
+
+        self.ensure_one()
+
+        # ----------------------------------
+        # Already Exists?
+        # ----------------------------------
+
+        existing = self.env['hr.salary.attachment'].search([
+            ('other_input_type_id', '=', self.salary_attachment_type_id.id),
+            ('employee_ids', 'in', self.employee_id.id),
+        ], limit=1)
+
+        if existing:
+            return
+
+        # ----------------------------------
+        # First day of current month
+        # ----------------------------------
+
+        today = fields.Date.today()
+
+        first_day = today.replace(day=1)
+
+        # ----------------------------------
+        # Calculate profit share
+        # ----------------------------------
+
+        net_profit = self._get_company_net_profit()
+
+        amount = (
+            net_profit *
+            self.percentage
+        ) / 100
+
+        # ----------------------------------
+        # Create Salary Adjustment
+        # ----------------------------------
+
+        self.env['hr.salary.attachment'].create({
+
+            'employee_ids': [
+                (6, 0, [self.employee_id.id])
+            ],
+
+            'company_id': self.company_id.id,
+
+            'other_input_type_id':
+                self.salary_attachment_type_id.id,
+
+            'monthly_amount': amount,
+
+            'is_refund': True,
+
+            'duration_type': 'unlimited',
+
+            'date_start': first_day,
+
+            'description':
+                f'Profit Sharing {self.percentage}%',
+
+        })
+    def _get_company_net_profit(self):
+
+        report = self.env['account.report'].search([
+            ('name', '=', 'Profit and Loss')
+        ], limit=1)
+
+        if not report:
+            return 0.0
+
+        options = report.get_options({})
+
+        lines = report._get_lines(options)
+
+        net_profit = 0.0
+
+        for line in lines:
+
+            if line.get('name') == 'Net Profit':
+
+                columns = line.get('columns', [])
+
+                if columns:
+                    net_profit = columns[0].get(
+                        'no_format',
+                        0.0
+                    )
+
+                break
+
+        return net_profit

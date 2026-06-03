@@ -8,7 +8,7 @@
                 <field name="employee_id"/>
                 <field name="company_id"/>
                 <field name="percentage"/>
-                <field name="salary_attachment_type_id"/>
+                <field name="salary_attachment_type_id" />
                 <field name="active"/>
             </list>
         </field>
@@ -82,7 +82,7 @@
     <menuitem
         id="menu_profit_sharing_root"
         name="Profit Sharing"
-        parent="hr.menu_hr_root"
+        parent="hr.menu_human_resources_configuration"
         sequence="90"/>
     <menuitem
         id="menu_profit_sharing_rule"
