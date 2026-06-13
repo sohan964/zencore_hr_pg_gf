@@ -10,6 +10,7 @@
     ],
     "data": [
         "views/account_report.xml",
+        "views/account_move_views.xml",
     ],
     "installable": True,
     "application": False,
