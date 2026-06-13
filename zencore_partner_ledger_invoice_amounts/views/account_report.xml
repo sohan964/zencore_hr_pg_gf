@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Untaxed Amount Column -->
+    <record id="zencore_partner_ledger_report_untaxed_amount" model="account.report.column">
+        <field name="name">Untaxed Amount</field>
+        <field name="expression_label">untaxed_amount</field>
+    </record>
+
+    <!-- Tax Amount Column -->
+    <record id="zencore_partner_ledger_report_tax_amount" model="account.report.column">
+        <field name="name">Tax Amount</field>
+        <field name="expression_label">tax_amount</field>
+    </record>
+
+    <!-- Attach columns to Partner Ledger -->
+    <record id="account_reports.partner_ledger_report" model="account.report">
+        <field name="column_ids" eval="[
+            (4, ref('zencore_partner_ledger_invoice_amounts.zencore_partner_ledger_report_untaxed_amount')),
+            (4, ref('zencore_partner_ledger_invoice_amounts.zencore_partner_ledger_report_tax_amount'))
+        ]"/>
+    </record>
+
+</odoo>
